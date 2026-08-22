@@ -1,103 +1,106 @@
-import Image from "next/image";
+import Link from "next/link";
+
+import { ResolverBox } from "@/components/ResolverBox";
+
+const SEGMENTS = [
+  {
+    chars: "7QM4KX92",
+    tag: "Property code",
+    note: "8 chars, Crockford base32, assigned by the registrar, carries no meaning",
+    tone: "text-ink",
+  },
+  {
+    chars: "1412",
+    tag: "Room designator",
+    note: "1 to 10 chars, the number on the door, chosen by the hotel",
+    tone: "text-ink font-semibold",
+  },
+  {
+    chars: "B",
+    tag: "Unit suffix",
+    note: "one letter, disambiguates re-numbered or subdivided units",
+    tone: "text-accent font-semibold",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="doc">
+      <p className="max-w-[24ch] text-[clamp(1.55rem,4vw,2.1rem)] font-semibold leading-[1.25] tracking-[-0.015em]">
+        Hotels sell room categories. Guests sleep in rooms.
+      </p>
+      <p className="mt-3 max-w-2xl text-[1.15rem] text-muted">
+        Software cannot transact on a thing that has no name.
+      </p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <p className="mt-6 max-w-2xl">
+        Open Room ID defines <strong>roomID</strong>: a permanent, publicly
+        resolvable identifier for a single hotel accommodation unit. One
+        physical room, one identifier, addressable by any system, forever.
+        Assignment is free. The registry stores identity and nothing else.
+      </p>
+
+      <h2>The identifier</h2>
+      <div className="anatomy" aria-label="Anatomy of a roomID">
+        {SEGMENTS.map((seg, i) => (
+          <span key={seg.tag} className="contents">
+            {i > 0 && (
+              <span aria-hidden className="anatomy-hyphen">
+                -
+              </span>
+            )}
+            <span className="anatomy-seg">
+              <span className={`anatomy-chars ${seg.tone}`}>{seg.chars}</span>
+              <span className="anatomy-tag">
+                {seg.tag}
+                <small>{seg.note}</small>
+              </span>
+            </span>
+          </span>
+        ))}
+      </div>
+      <p>
+        The property-only form <code>7QM4KX92</code> names the property
+        itself. The canonical URI form is <code>rid:7QM4KX92-1412-B</code>.
+      </p>
+
+      <h2>Resolve an identifier</h2>
+      <p>
+        Every identifier resolves at{" "}
+        <code>openroomid.org/&#123;roomID&#125;</code>, as HTML for people
+        and JSON-LD for software.
+      </p>
+      <ResolverBox />
+      <p className="text-[0.85rem] text-muted">
+        The registry currently contains demonstration records only.
+      </p>
+
+      <h2>What the resolver returns</h2>
+      <p>
+        Identity, status, containment, and supersession. Nothing else. No
+        rates, no availability, no scores, no attributes. Identifying a room
+        is free infrastructure; describing one is somebody&apos;s product,
+        and the two must never mix.
+      </p>
+
+      <h2>Documents</h2>
+      <ul>
+        <li>
+          <Link href="/spec/1.0">Specification 1.0</Link>, the normative
+          definition of syntax, assignment, lifecycle, and resolution
+        </li>
+        <li>
+          <Link href="/registry">Registry policy</Link>, who can request
+          identifiers and what it costs (nothing)
+        </li>
+        <li>
+          <Link href="/implement">Implementation guide</Link>, copy-paste
+          JSON-LD for hotel and room pages
+        </li>
+        <li>
+          <a href="https://github.com/curtiscrimmins/openroomid">Source repository</a>
+        </li>
+      </ul>
     </div>
   );
 }

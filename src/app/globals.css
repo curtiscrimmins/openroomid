@@ -1,26 +1,392 @@
+/* Hallmark · genre: editorial · macrostructure: Long Document (registry document) · designed-as-app
+ * theme: custom (vibe: "standards body, print-institutional, 2009")
+ * paper oklch(98.2% 0.004 250) · accent oklch(45% 0.11 255) cool-blue · Source Serif 4 + IBM Plex Mono
+ * axes: light / roman-serif / cool · nav: masthead mono-caps · footer: registrar block
+ * Hallmark · pre-emit critique: P4 H5 E4 S5 R5 V4
+ */
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-paper: oklch(98.2% 0.004 250);
+  --color-field: oklch(99.4% 0.002 250);
+  --color-panel: oklch(96% 0.006 250);
+  --color-ink: oklch(23% 0.012 260);
+  --color-muted: oklch(45% 0.014 260);
+  --color-rule: oklch(87% 0.01 250);
+  --color-accent: oklch(45% 0.11 255);
+  --color-accent-dark: oklch(34% 0.1 255);
+  --color-error: oklch(44% 0.12 30);
+
+  --font-serif: var(--font-source-serif), Georgia, "Times New Roman", serif;
+  --font-mono-stack: var(--font-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --text-sm: 0.85rem;
+  --text-label: 0.72rem;
+  --text-base: 1.0625rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.55rem;
+  --text-xl: 1.95rem;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--color-paper);
+  --color-field: var(--color-field);
+  --color-panel: var(--color-panel);
+  --color-ink: var(--color-ink);
+  --color-muted: var(--color-muted);
+  --color-rule: var(--color-rule);
+  --color-accent: var(--color-accent);
+  --color-error: var(--color-error);
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono-stack);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-paper);
+  overflow-x: clip;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  line-height: 1.65;
+  overflow-x: clip;
+}
+
+::selection {
+  background: color-mix(in oklch, var(--color-accent) 18%, var(--color-paper));
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in oklch, var(--color-accent) 45%, transparent);
+  transition: color 120ms ease-out, text-decoration-color 120ms ease-out;
+}
+
+a:hover {
+  color: var(--color-accent-dark);
+  text-decoration-color: currentColor;
+}
+
+code,
+pre {
+  font-family: var(--font-mono-stack);
+}
+
+code {
+  font-size: 0.86em;
+  background: var(--color-panel);
+  border: 1px solid var(--color-rule);
+  padding: 0.05em 0.3em;
+}
+
+pre {
+  background: var(--color-panel);
+  border: 1px solid var(--color-rule);
+  padding: 1rem 1.2rem;
+  overflow-x: auto;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Site chrome ---------------------------------------------------------- */
+
+.site-name {
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.site-name:hover {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.site-nav a {
+  font-family: var(--font-mono-stack);
+  font-size: var(--text-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--color-accent);
+}
+
+/* Registry-machinery labels: table headers, statuses, small captions */
+.label-caps {
+  font-family: var(--font-mono-stack);
+  font-size: var(--text-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+/* Buttons -------------------------------------------------------------- */
+
+.btn {
+  font-family: var(--font-mono-stack);
+  font-size: var(--text-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
+  background: var(--color-paper);
+  border: 1px solid var(--color-ink);
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  transition: background 120ms ease-out;
+}
+
+.btn:hover {
+  background: var(--color-panel);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
+}
+
+/* Status badge --------------------------------------------------------- */
+
+.status {
+  display: inline-block;
+  font-family: var(--font-mono-stack);
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--color-rule);
+  background: var(--color-panel);
+  padding: 0.1rem 0.45rem;
+  color: var(--color-muted);
+}
+
+.status-active {
+  color: var(--color-ink);
+}
+
+/* Identifier anatomy diagram ------------------------------------------ */
+
+.anatomy {
+  display: flex;
+  align-items: stretch;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 1.75rem 0 1.25rem;
+}
+
+.anatomy-seg {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.anatomy-chars {
+  font-family: var(--font-mono-stack);
+  font-size: clamp(1.35rem, 4.5vw, 2.05rem);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+}
+
+.anatomy-hyphen {
+  font-family: var(--font-mono-stack);
+  font-size: clamp(1.35rem, 4.5vw, 2.05rem);
+  line-height: 1.1;
+  color: var(--color-muted);
+  align-self: flex-start;
+}
+
+.anatomy-tag {
+  border-top: 1px solid var(--color-rule);
+  padding-top: 0.45rem;
+  font-family: var(--font-mono-stack);
+  font-size: 0.66rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+  max-width: 12rem;
+}
+
+.anatomy-tag small {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.45;
+}
+
+/* Long-form document styling ------------------------------------------ */
+
+.doc h1 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+}
+
+.doc h2 {
+  font-size: var(--text-md);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 2.4rem 0 0.6rem;
+  border-bottom: 1px solid var(--color-rule);
+  padding-bottom: 0.3rem;
+}
+
+.doc h3 {
+  font-size: var(--text-base);
+  font-weight: 700;
+  margin: 1.7rem 0 0.4rem;
+}
+
+.doc p,
+.doc li {
+  max-width: 62ch;
+}
+
+.doc p {
+  margin: 0.7rem 0;
+}
+
+.doc ul,
+.doc ol {
+  padding-left: 1.4rem;
+  margin: 0.7rem 0;
+}
+
+.doc li {
+  margin: 0.35rem 0;
+}
+
+.doc li::marker {
+  color: var(--color-muted);
+}
+
+.doc table {
+  border-collapse: collapse;
+  margin: 1.1rem 0;
+  font-size: 0.92rem;
+}
+
+.doc th,
+.doc td {
+  border: 1px solid var(--color-rule);
+  padding: 0.4rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.doc th {
+  background: var(--color-panel);
+  font-family: var(--font-mono-stack);
+  font-size: var(--text-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-muted);
+}
+
+.doc td {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Anchor links: hidden until the heading is hovered or focused. */
+.doc .anchor {
+  margin-left: 0.45rem;
+  font-size: 0.8em;
+  font-weight: 400;
+  text-decoration: none;
+  color: var(--color-accent);
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
+.doc h2:hover .anchor,
+.doc h3:hover .anchor,
+.doc .anchor:focus-visible {
+  opacity: 1;
+}
+
+.doc .open-issue {
+  border: 1px solid var(--color-rule);
+  background: var(--color-panel);
+  padding: 0.7rem 1rem;
+  margin: 1.1rem 0;
+  font-size: 0.92rem;
+  max-width: 62ch;
+}
+
+.doc .open-issue strong {
+  font-family: var(--font-mono-stack);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  margin-right: 0.25rem;
+}
+
+/* Print: the spec should read like a document, not a website. */
+@media print {
+  header,
+  footer,
+  .site-nav,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    font-size: 11pt;
+  }
+  .doc .anchor {
+    display: none;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

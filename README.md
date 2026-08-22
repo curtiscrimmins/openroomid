@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# openroomid.org
 
-## Getting Started
+Public home of the Open Room ID standard: the specification, the
+registry policy, the implementation guide, and the resolver that turns
+any roomID into an HTML page or a JSON-LD record.
 
-First, run the development server:
+Open Room ID defines `roomID`, a permanent, publicly resolvable
+identifier for a single hotel accommodation unit. Identity is free and
+stays free; the registry stores identity only. See `DECISIONS.md` for
+judgment calls and open issues.
+
+## Stack
+
+Next.js 15 (App Router), TypeScript, Tailwind v4, Supabase (Postgres,
+read-only from the app), Vitest. Deploys to Vercel.
+
+## Local setup
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+That is the whole setup. With no environment variables, the app serves
+an in-memory copy of the demonstration registry (El Cortez Hotel &
+Casino, 41 units), so every route works without a database.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Useful local URLs:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- http://localhost:3000/7QM4KX92 (property record)
+- http://localhost:3000/7QM4KX92-1412-B (unit record, the spec's example)
+- http://localhost:3000/7QM4KX92-1412-A (superseded, 301s to 1412-B)
+- http://localhost:3000/7QM4KX92-1407-A (retired)
+- `curl -H "Accept: application/ld+json" localhost:3000/7QM4KX92-1412-B`
 
-## Learn More
+## Checks
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run test        # Vitest: parser, negotiation, JSON-LD shapes
+npm run typecheck   # tsc --noEmit
+npm run lint
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Wiring up Supabase
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Create a Supabase project (its own project, not shared with anything
+   else).
+2. Run the migration: paste `supabase/migrations/0001_registry.sql`
+   into the SQL editor, or use `supabase db push` if the CLI is linked.
+3. Copy `.env.example` to `.env.local` and fill in the project URL, the
+   publishable key (`sb_publishable_...`), and the secret key
+   (`sb_secret_...`).
+4. Seed the demo data: `npm run seed`. Idempotent; re-running upserts.
 
-## Deploy on Vercel
+Once `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` are set, registry
+reads come from Supabase instead of the in-memory dataset. The secret
+key is used only server-side, by the seed script and the /registry
+intake form.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Demo rows carry `is_demo = true`. To clear them later:
+`delete from units where is_demo; delete from properties where is_demo;`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deploy (Vercel)
+
+1. Push this repository to GitHub and import it into Vercel.
+2. Set the three environment variables from `.env.example` in the
+   Vercel project settings.
+3. Point the `openroomid.org` domain at the Vercel project.
+
+No other configuration: no auth, no analytics, no cron. The resolver's
+rate limiting is in-memory per instance, which is adequate at v0
+traffic; swap in a shared store if that ever matters.
+
+## Layout
+
+```
+src/lib/roomid.ts        identifier syntax: the only place regexes live
+src/lib/registry*.ts     read-only registry access (Supabase or demo)
+src/lib/negotiate.ts     Accept-header content negotiation
+src/lib/jsonld.ts        JSON-LD response shapes
+src/lib/resolver-html.ts HTML documents for the resolver route
+src/app/[id]/route.ts    the resolver
+src/app/spec/1.0/        the specification (immutable once Published)
+supabase/migrations/     schema, with the identity-only guard comment
+scripts/seed.ts          demo seed, from src/data/demo-registry.ts
+```

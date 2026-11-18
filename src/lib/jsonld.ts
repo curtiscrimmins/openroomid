@@ -27,6 +27,7 @@ export function unitJsonLd(
     "@id": `${origin}/${unit.roomId}`,
     identifier: identifier("roomID", unit.roomId),
     name: unit.displayName ?? `Room ${unit.roomDesignator}`,
+    designatorSource: unit.designatorSource,
   };
   if (unit.floorLevel !== null) {
     doc.floorLevel = unit.floorLevel;
@@ -63,7 +64,8 @@ export function propertyJsonLd(
     name: property.name,
   };
   const addressParts = {
-    streetAddress: property.address,
+    // Residences publish locality only (section 4.5).
+    streetAddress: property.isResidence ? null : property.address,
     addressLocality: property.city,
     addressRegion: property.region,
     addressCountry: property.country,
@@ -77,6 +79,13 @@ export function propertyJsonLd(
     };
   }
   doc.containsPlace = units.map((u) => `${origin}/${u.roomId}`);
+  doc.claim = property.claimStatus;
+  if (property.lastConfirmed !== null) {
+    doc.lastConfirmed = property.lastConfirmed;
+  }
+  if (property.isResidence) {
+    doc.residence = true;
+  }
   doc.status = property.status;
   doc.assigned = property.assignedAt;
   if (property.supersededBy !== null) {

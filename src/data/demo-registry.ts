@@ -8,6 +8,8 @@
  */
 
 export type RecordStatus = "active" | "retired" | "superseded";
+export type ClaimStatus = "claimed" | "unclaimed";
+export type DesignatorSource = "door" | "assigned";
 
 export interface DemoProperty {
   propertyCode: string;
@@ -16,6 +18,9 @@ export interface DemoProperty {
   city: string;
   region: string;
   country: string;
+  isResidence: boolean;
+  claimStatus: ClaimStatus;
+  lastConfirmed: string | null;
   status: RecordStatus;
   assignedAt: string;
   supersededBy: string | null;
@@ -27,6 +32,7 @@ export interface DemoUnit {
   propertyCode: string;
   roomDesignator: string;
   unitSuffix: string;
+  designatorSource: DesignatorSource;
   displayName: string;
   floorLevel: string;
   status: RecordStatus;
@@ -42,6 +48,10 @@ export const DEMO_PROPERTY: DemoProperty = {
   city: "Las Vegas",
   region: "NV",
   country: "US",
+  isResidence: false,
+  // Demonstration data only: El Cortez has not claimed these records.
+  claimStatus: "unclaimed",
+  lastConfirmed: null,
   status: "active",
   assignedAt: "2026-08-09",
   supersededBy: null,
@@ -58,6 +68,7 @@ function unit(
     propertyCode: DEMO_PROPERTY.propertyCode,
     roomDesignator: designator,
     unitSuffix: suffix,
+    designatorSource: "door",
     displayName: `Room ${designator}`,
     floorLevel: designator.slice(0, 2),
     status: "active",

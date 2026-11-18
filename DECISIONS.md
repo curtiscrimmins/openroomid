@@ -181,3 +181,47 @@ markers in the spec are listed at the bottom as they accumulate.
 See item 18; the list there is the authoritative one, each marked
 inline in /spec/1.0.
 
+
+## Working group resolutions, 2026-09-29
+
+Adopted by the working group (Curtis Crimmins with Claude as drafter)
+and written into /spec/1.0 as normative text.
+
+R1. **Mixed unit labels.** Units with a stable door label keep it as the
+    designator. Named, unlabeled, or unstable units get a 4-character
+    Crockford code assigned by the registrar, checked against every
+    designator ever used at the property and never reused. The record
+    carries `designatorSource: door | assigned`. Switching a unit from
+    door to assigned is a supersession. Resolves spec 5.6, the question
+    that blocked Published status. Implemented: `assignDesignator` in
+    `src/lib/roomid.ts`, `designator_source` in migration 0002.
+
+R2. **Names are display data.** A unit's name lives in the record and can
+    change without changing the identifier.
+
+R3. **Claims belong to the operator, records to the property.** Records
+    are `claimed` or `unclaimed` with a `lastConfirmed` date. Withdrawal
+    returns a record to unclaimed; a change of operator ends the claim
+    automatically; nobody, including the registrar, deletes a record.
+    Spec 4.4.
+
+R4. **Residences publish locality only.** Owner-occupied homes carry no
+    street address in the public record or the dump. The registrar holds
+    it in `residence_addresses`, which the public cannot read, to prevent
+    duplicate codes. The only exception to full publication. Spec 4.5.
+
+Still open: third-party pre-registration (4.3), composed and connecting
+units (4.3), succession (7), check character (paper open question 5).
+
+## Public votes on open questions, 2026-09-30
+
+The five undecided policy questions (pre-registration, composed units,
+shared units, check character, succession) are on the home page with a
+nonbinding vote. One vote per question per browser, changeable; results
+show only after voting, to limit herding. A voter is a random ID in an
+httpOnly cookie; no IP or personal data is stored. Storage: Supabase
+`question_votes` (migration 0003) when configured, else `.data/` locally,
+else memory on Vercel (votes lost on redeploy until Supabase exists).
+Questions live in `src/data/open-questions.ts`; never rename a live
+option id. Cookie-based dedupe is soft: a determined person can vote
+again from a private window, which is acceptable for a nonbinding poll.

@@ -35,7 +35,7 @@ export default function RegistryPage() {
       <ol>
         <li>
           Submit the form below, or email{" "}
-          <a href="mailto:curtis@roomza.com">curtis@roomza.com</a> with the
+          <a href="mailto:registry@openroomid.org">registry@openroomid.org</a> with the
           same information: property name, address, a contact at the
           property, and roughly how many units you operate.
         </li>
@@ -66,8 +66,8 @@ export default function RegistryPage() {
 
       <h2>Contact</h2>
       <p>
-        Registrar: Roomza, Inc., 228 Park Ave S, New York, NY.{" "}
-        <a href="mailto:curtis@roomza.com">curtis@roomza.com</a>
+        Registrar: the OpenRoomID Project.{" "}
+        <a href="mailto:registry@openroomid.org">registry@openroomid.org</a>
       </p>
     </div>
   );

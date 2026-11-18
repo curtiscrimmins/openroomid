@@ -34,7 +34,7 @@ export async function submitRegistrationRequest(
     return {
       status: "error",
       message:
-        "The intake database is not configured yet. Email curtis@roomza.com instead; the request is identical.",
+        "The intake database is not configured yet. Email registry@openroomid.org instead; the request is identical.",
     };
   }
 
@@ -53,7 +53,7 @@ export async function submitRegistrationRequest(
     return {
       status: "error",
       message:
-        "The request could not be stored. Email curtis@roomza.com instead; the request is identical.",
+        "The request could not be stored. Email registry@openroomid.org instead; the request is identical.",
     };
   }
 

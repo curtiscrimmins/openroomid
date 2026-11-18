@@ -35,16 +35,16 @@ export function ResolverBox() {
           spellCheck={false}
           autoComplete="off"
           aria-label="roomID to resolve"
-          className="w-full border border-rule bg-field px-3 py-2 font-mono text-[0.95rem] outline-none focus:border-accent"
+          className="field field-mono"
         />
         <button type="submit" className="btn shrink-0">
           Resolve
         </button>
       </div>
       {error ? (
-        <p className="mt-2 max-w-xl text-[0.88rem] text-error">{error}</p>
+        <p className="mt-2 max-w-xl text-sm text-error">{error}</p>
       ) : (
-        <p className="mt-2 text-[0.88rem] text-muted">
+        <p className="mt-2 text-sm text-muted">
           Accepts a full unit identifier, a property code, or a rid: URI.
         </p>
       )}

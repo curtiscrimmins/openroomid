@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
+import { IBM_Plex_Mono, Public_Sans } from "next/font/google";
 import Link from "next/link";
+
+import { SiteNav } from "@/components/SiteNav";
+import { Mark } from "@/components/Wordmark";
 
 import "./globals.css";
 
-const serif = Source_Serif_4({
+const sans = Public_Sans({
   subsets: ["latin"],
-  variable: "--font-source-serif",
-  style: ["normal", "italic"],
+  variable: "--font-public-sans",
+  weight: ["400", "500", "600", "700"],
 });
 
 const mono = IBM_Plex_Mono({
@@ -19,69 +22,59 @@ const mono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://openroomid.org"),
   title: {
-    default: "Open Room ID",
-    template: "%s | Open Room ID",
+    default: "OpenRoomID",
+    template: "%s | OpenRoomID",
   },
   description:
-    "An open standard for roomID: a permanent, publicly resolvable identifier for a single hotel accommodation unit.",
+    "OpenRoomID is an open standard for roomID, a permanent public identifier for a single accommodation unit. Assignment and resolution are free.",
 };
-
-const NAV = [
-  { href: "/spec/1.0", label: "Specification" },
-  { href: "/registry", label: "Registry" },
-  { href: "/implement", label: "Implement" },
-  { href: "/changelog", label: "Changelog" },
-];
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${serif.variable} ${mono.variable}`}>
+    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
       <body>
-        <header className="border-b-2 border-ink">
-          <div className="mx-auto flex max-w-3xl flex-wrap items-baseline justify-between gap-x-6 gap-y-2 px-5 pb-3 pt-5">
-            <Link href="/" className="site-name">
-              Open Room ID
+        <header className="masthead">
+          <div className="shell masthead-inner">
+            <Link href="/" className="brand" aria-label="OpenRoomID, home">
+              <Mark height={15} />
+              <span>
+                <span className="brand-name">OpenRoomID</span>
+                <span className="brand-line">
+                  An open identifier for accommodation units
+                </span>
+              </span>
             </Link>
-            <nav className="site-nav flex flex-wrap gap-x-5 gap-y-1">
-              {NAV.map((item) => (
-                <Link key={item.href} href={item.href}>
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+            <SiteNav />
           </div>
         </header>
-        <div aria-hidden className="mt-[2px] border-b border-rule" />
-        <main className="mx-auto max-w-3xl px-5 pb-20 pt-9">{children}</main>
-        <footer className="border-t border-rule">
-          <div className="mx-auto grid max-w-3xl gap-x-10 gap-y-4 px-5 py-8 text-[0.85rem] text-muted sm:grid-cols-[1fr_auto]">
-            <div>
-              <p className="label-caps mb-1.5">Registrar</p>
-              <p className="max-w-md">
-                Administered by <a href="https://www.roomza.com">Roomza, Inc.</a>,
-                228 Park Ave S, New York, NY. Identifier assignment is free and
-                always will be.
-              </p>
-            </div>
-            <div>
-              <p className="label-caps mb-1.5">Documents</p>
-              <ul className="space-y-1">
-                <li>
-                  <Link href="/spec/1.0">Specification 1.0</Link>
-                </li>
-                <li>
-                  <Link href="/registry">Registry policy</Link>
-                </li>
-                <li>
-                  <a href="https://github.com/curtiscrimmins/openroomid">Source</a>
-                </li>
-                <li>
-                  <a href="mailto:curtis@roomza.com">Contact</a>
-                </li>
-              </ul>
-            </div>
+        <main className="shell pb-8">{children}</main>
+        <footer className="site-footer">
+          <div className="shell site-footer-inner">
+            <p className="footer-statement">
+              <span className="font-semibold text-ink">The OpenRoomID Project</span>{" "}
+              is the registrar. Assignment and resolution are free and stay
+              free. The specification is licensed CC BY 4.0 and registry
+              records are CC0.
+            </p>
+            <ul>
+              <li>
+                <Link href="/spec/1.0#section-7">Governance</Link>
+              </li>
+              <li>
+                <Link href="/brand">Identity</Link>
+              </li>
+              <li>
+                <a href="https://github.com/curtiscrimmins/openroomid">Source</a>
+              </li>
+              <li>
+                <a href="https://github.com/curtiscrimmins/openroomid/issues">Feedback</a>
+              </li>
+              <li>
+                <a href="mailto:registry@openroomid.org">registry@openroomid.org</a>
+              </li>
+            </ul>
           </div>
         </footer>
       </body>

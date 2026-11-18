@@ -8,7 +8,11 @@
  * uppercased lookup key; canonical casing is preserved in the record.
  */
 
-import type { RecordStatus } from "@/data/demo-registry";
+import type {
+  ClaimStatus,
+  DesignatorSource,
+  RecordStatus,
+} from "@/data/demo-registry";
 import { demoRegistry } from "@/lib/registry-demo";
 import { supabaseRegistry } from "@/lib/registry-supabase";
 
@@ -19,6 +23,12 @@ export interface PropertyRecord {
   city: string | null;
   region: string | null;
   country: string | null;
+  /** Owner-occupied residence: street address is never published. */
+  isResidence: boolean;
+  /** Whether the current operator has claimed the property (section 4.4). */
+  claimStatus: ClaimStatus;
+  /** Date the operator last confirmed the unit list, or null. */
+  lastConfirmed: string | null;
   status: RecordStatus;
   assignedAt: string;
   supersededBy: string | null;
@@ -30,6 +40,8 @@ export interface UnitRecord {
   propertyCode: string;
   roomDesignator: string;
   unitSuffix: string;
+  /** Where the designator came from: the door, or the registrar (section 4.2). */
+  designatorSource: DesignatorSource;
   displayName: string | null;
   floorLevel: string | null;
   status: RecordStatus;

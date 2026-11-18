@@ -1,5 +1,5 @@
 /**
- * Open Room ID identifier syntax, parsing, validation, and normalization.
+ * OpenRoomID identifier syntax, parsing, validation, and normalization.
  *
  * This module is the single source of truth for identifier syntax.
  * Every other module imports from here. Do not inline these regexes
@@ -231,4 +231,29 @@ export function normalizeRoomId(input: string): string | null {
 /** The canonical rid: URI for a parsed identifier or canonical string. */
 export function toRidUri(canonical: string): string {
   return `${RID_URI_PREFIX}${canonical}`;
+}
+
+/** Length of a registrar-assigned designator (section 4.2). */
+export const ASSIGNED_DESIGNATOR_LENGTH = 4;
+
+/**
+ * Draws a registrar-assigned designator: four Crockford base32
+ * characters that clash with no designator, door or assigned, already
+ * used at the property (compared case-insensitively). Assigned
+ * designators are never reused, so `taken` must include retired and
+ * superseded ones.
+ */
+export function assignDesignator(
+  taken: Iterable<string>,
+  random: () => number = Math.random,
+): string {
+  const used = new Set(Array.from(taken, (d) => d.toUpperCase()));
+  for (let attempt = 0; attempt < 10_000; attempt++) {
+    let code = "";
+    for (let i = 0; i < ASSIGNED_DESIGNATOR_LENGTH; i++) {
+      code += CROCKFORD_ALPHABET[Math.floor(random() * CROCKFORD_ALPHABET.length)];
+    }
+    if (!used.has(code)) return code;
+  }
+  throw new Error("could not draw an unused designator for this property");
 }

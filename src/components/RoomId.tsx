@@ -12,15 +12,15 @@ export function RoomId({
 }) {
   const parts = id.split("-");
   if (parts.length !== 3) {
-    return <span className={`font-mono ${className}`}>{id}</span>;
+    return <span className={`rid ${className}`}>{id}</span>;
   }
   return (
-    <span className={`font-mono ${className}`}>
+    <span className={`rid ${className}`}>
       <span>{parts[0]}</span>
-      <span className="text-muted">-</span>
-      <span className="font-semibold">{parts[1]}</span>
-      <span className="text-muted">-</span>
-      <span className="font-semibold text-accent">{parts[2]}</span>
+      <span className="sep">-</span>
+      <span className="room">{parts[1]}</span>
+      <span className="sep">-</span>
+      <span className="unit">{parts[2]}</span>
     </span>
   );
 }

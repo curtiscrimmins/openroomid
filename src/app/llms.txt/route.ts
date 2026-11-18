@@ -1,6 +1,6 @@
-const BODY = `# Open Room ID
+const BODY = `# OpenRoomID
 
-Open Room ID defines roomID: a permanent, publicly resolvable identifier
+OpenRoomID defines roomID: a permanent, publicly resolvable identifier
 for a single hotel accommodation unit (one physical room). The registry
 and resolver are free, require no authentication, and store identity
 only: no attributes, no scores, no rates, no availability.
@@ -35,9 +35,15 @@ Identifiers are permanent; the registry never deletes records.
 - Implementation guide (JSON-LD blocks): https://openroomid.org/implement
 - Changelog: https://openroomid.org/changelog
 
-Registrar: Roomza, Inc., 228 Park Ave S, New York, NY. Contact:
-curtis@roomza.com. The registry currently contains demonstration
-records only; no hotel has implemented the standard yet.
+- Paper, working draft v0.2: https://openroomid.org/paper
+- Volunteer roles: https://openroomid.org/volunteer
+
+Registrar: the OpenRoomID Project. Founding sponsor: Roomza, Inc.,
+which sells room data outside the registry. Registry records are CC0.
+Contact: registry@openroomid.org. Feedback:
+https://github.com/curtiscrimmins/openroomid/issues. The registry
+currently contains demonstration records only; no hotel has
+implemented the standard yet.
 `;
 
 export function GET() {

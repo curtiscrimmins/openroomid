@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   CROCKFORD_ALPHABET,
+  assignDesignator,
   PROPERTY_CODE_PATTERN,
   ROOM_DESIGNATOR_PATTERN,
   ROOM_ID_PATTERN,
@@ -270,5 +271,32 @@ describe("exported patterns", () => {
     expect(UNIT_SUFFIX_PATTERN.test("B")).toBe(true);
     expect(UNIT_SUFFIX_PATTERN.test("b")).toBe(false);
     expect(UNIT_SUFFIX_PATTERN.test("BB")).toBe(false);
+  });
+});
+
+describe("assignDesignator", () => {
+  it("draws four Crockford characters", () => {
+    const code = assignDesignator([]);
+    expect(code).toMatch(/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{4}$/);
+  });
+
+  it("never returns a designator already used at the property", () => {
+    // A random source that yields the same code twice, then another.
+    const seq = [0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0.5, 0.5, 0.5];
+    let i = 0;
+    const random = () => seq[i++ % seq.length];
+    expect(assignDesignator(["0000"], random)).toBe("GGGG");
+  });
+
+  it("compares case-insensitively against door labels", () => {
+    const seq = [0.5, 0.5, 0.5, 0.5, 0, 0, 0, 0];
+    let i = 0;
+    const random = () => seq[i++ % seq.length];
+    expect(assignDesignator(["gggg"], random)).toBe("0000");
+  });
+
+  it("parses as an ordinary roomID", () => {
+    const code = assignDesignator([]);
+    expect(parseRoomId(`7QM4KX92-${code}-A`).ok).toBe(true);
   });
 });

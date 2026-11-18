@@ -38,69 +38,70 @@ function shell(title: string, body: string): string {
 <title>${esc(title)}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: oklch(98.2% 0.004 250);
-    --panel: oklch(96% 0.006 250);
-    --ink: oklch(23% 0.012 260);
-    --muted: oklch(45% 0.014 260);
-    --rule: oklch(87% 0.01 250);
-    --accent: oklch(45% 0.11 255);
-    --accent-dark: oklch(34% 0.1 255);
-    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --paper: oklch(99% 0.002 250);
+    --panel: oklch(96.6% 0.004 250);
+    --ink: oklch(21% 0.012 255);
+    --muted: oklch(47% 0.012 255);
+    --rule: oklch(88.5% 0.006 250);
+    --accent: oklch(42% 0.13 262);
+    --accent-dark: oklch(33% 0.12 262);
+    --sans: "Public Sans", "Helvetica Neue", Arial, sans-serif;
     --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --radius: 3px;
   }
   * { box-sizing: border-box; }
+  html, body { overflow-x: clip; }
   body { margin: 0; background: var(--paper); color: var(--ink);
-         font-family: var(--serif);
-         font-size: 17px; line-height: 1.65; }
-  main { max-width: 46rem; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+         font-family: var(--sans); font-size: 16px; line-height: 1.6;
+         -webkit-font-smoothing: antialiased; }
+  main { max-width: 66rem; margin: 0 auto; padding: 0 1.25rem 4rem; }
+  main > * { max-width: 44rem; }
   a { color: var(--accent); text-underline-offset: 3px;
       text-decoration-thickness: 1px; }
   a:hover { color: var(--accent-dark); }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  ::selection { background: color-mix(in oklch, var(--accent) 18%, var(--paper)); }
-  header.site { border-bottom: 2px solid var(--ink); }
-  .rule-thin { height: 1px; background: var(--rule); margin-top: 2px; }
-  header.site .inner { max-width: 46rem; margin: 0 auto;
-                       padding: 1.1rem 1.25rem 0.7rem;
+  ::selection { background: color-mix(in oklch, var(--accent) 16%, var(--paper)); }
+  header.site { border-bottom: 1px solid var(--ink); }
+  .rule-thin { display: none; }
+  header.site .inner { max-width: 66rem; margin: 0 auto;
+                       padding: 1.5rem 1.25rem 1rem;
                        display: flex; justify-content: space-between;
-                       align-items: baseline; gap: 1rem; }
+                       align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
   header.site a.home { color: inherit; text-decoration: none;
-                       font-weight: 700; font-size: 1.2rem;
-                       letter-spacing: -0.015em; }
-  .caps { font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
-          text-transform: uppercase; letter-spacing: 0.09em;
-          color: var(--muted); }
-  h1 { font-size: 1.55rem; letter-spacing: -0.01em; margin: 1.6rem 0 0.4rem; }
+                       display: flex; align-items: center; gap: 0.75rem; }
+  header.site .name { display: block; font-weight: 700; font-size: 1.1875rem;
+                      letter-spacing: -0.015em; line-height: 1.15; }
+  header.site .line { display: block; font-size: 0.8125rem; color: var(--muted); }
+  .caps { font-size: 0.875rem; font-weight: 500; color: var(--muted); }
+  h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em;
+       line-height: 1.15; margin: 2.5rem 0 0.5rem; }
   .rid, code { font-family: var(--mono); }
-  .rid { font-size: 1.35rem; font-weight: 500; }
+  .rid { font-size: 1.5rem; font-weight: 500; }
   .rid-sep { color: var(--muted); }
   .rid-room { font-weight: 600; }
   .rid-unit { font-weight: 600; color: var(--accent); }
-  code { font-size: 0.86em; background: var(--panel);
-         border: 1px solid var(--rule); padding: 0.05em 0.3em; }
-  .status { display: inline-block; font-family: var(--mono);
-            font-size: 0.68rem; font-weight: 500; text-transform: uppercase;
-            letter-spacing: 0.08em; border: 1px solid var(--rule);
-            padding: 0.1rem 0.45rem; background: var(--panel);
-            color: var(--muted); }
-  .status-active { color: var(--ink); }
-  table { border-collapse: collapse; width: 100%; margin: 1.2rem 0; }
-  th, td { text-align: left; padding: 0.45rem 0.75rem 0.45rem 0;
+  code { font-size: 0.88em; background: var(--panel); padding: 0.08em 0.35em;
+         border-radius: var(--radius); }
+  .status { display: inline-block; font-size: 0.8125rem; font-weight: 500;
+            border: 1px solid var(--rule); border-radius: var(--radius);
+            padding: 0 0.5rem; color: var(--muted); }
+  .status-active { color: var(--ink); border-color: var(--ink); }
+  table { border-collapse: collapse; width: 100%; margin: 1.5rem 0;
+          font-size: 0.875rem; border-top: 1px solid var(--ink); }
+  th, td { text-align: left; padding: 0.5rem 1rem 0.5rem 0;
            border-bottom: 1px solid var(--rule); vertical-align: baseline; }
-  th { font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
-       text-transform: uppercase; letter-spacing: 0.08em;
-       color: var(--muted); width: 11rem; }
+  th { font-weight: 600; color: var(--ink); width: 11rem; }
   td { font-variant-numeric: tabular-nums; }
-  .note { border: 1px solid var(--rule); background: var(--panel);
-          padding: 0.7rem 1rem; font-size: 0.9rem; margin: 1.2rem 0;
+  .note { border-left: 2px solid var(--accent);
+          padding: 0.2rem 0 0.2rem 1rem; font-size: 0.875rem; margin: 1.25rem 0;
           max-width: 62ch; }
-  footer { border-top: 1px solid var(--rule); margin-top: 3rem;
-           padding-top: 1rem; font-size: 0.85rem; color: var(--muted); }
+  footer { border-top: 1px solid var(--ink); margin-top: 4rem;
+           padding-top: 1rem; font-size: 0.875rem; color: var(--muted); }
   .unitlist { columns: 3; column-gap: 2rem;
-              font-family: var(--mono); font-size: 0.88rem;
+              font-family: var(--mono); font-size: 0.875rem;
               list-style: none; padding: 0; }
   .unitlist li { margin: 0.2rem 0; }
   .unitlist a { text-decoration: none; }
@@ -110,7 +111,7 @@ function shell(title: string, body: string): string {
 </head>
 <body>
 <header class="site"><div class="inner">
-  <a class="home" href="/">Open Room ID</a>
+  <a class="home" href="/" aria-label="OpenRoomID, home"><svg width="56" height="15" viewBox="0 0 30 8" aria-hidden="true"><rect x="0" y="0" width="16" height="8" fill="currentColor"/><rect x="18" y="0" width="8" height="8" fill="currentColor"/><rect x="28" y="0" width="2" height="8" fill="var(--accent)"/></svg><span><span class="name">OpenRoomID</span><span class="line">An open identifier for accommodation units</span></span></a>
   <span class="caps">Registry record</span>
 </div></header>
 <div class="rule-thin" aria-hidden="true"></div>
@@ -118,9 +119,9 @@ function shell(title: string, body: string): string {
 ${body}
 <footer>
   The registry stores identity only: no attributes, no rates, no scores.
-  <a href="/spec/1.0">Specification 1.0</a> &middot;
-  <a href="/registry">Registry policy</a> &middot;
-  Administered by <a href="https://www.roomza.com">Roomza, Inc.</a>
+  <a href="/spec/1.0">Specification 1.0</a>.
+  <a href="/registry">Registry policy</a>.
+  Registrar: the OpenRoomID Project. Records are CC0.
 </footer>
 </main>
 </body>
@@ -151,11 +152,15 @@ export function unitHtml(
     );
   }
   rows.push(
-    `<tr><th>Room designator</th><td><code>${esc(unit.roomDesignator)}</code></td></tr>`,
+    `<tr><th>Room designator</th><td><code>${esc(unit.roomDesignator)}</code> ${
+      unit.designatorSource === "assigned"
+        ? "assigned by the registrar, not the number on the door"
+        : "the label on the door"
+    }</td></tr>`,
     `<tr><th>Unit suffix</th><td><code>${esc(unit.unitSuffix)}</code></td></tr>`,
   );
   if (unit.displayName) {
-    rows.push(`<tr><th>Display name</th><td>${esc(unit.displayName)}</td></tr>`);
+    rows.push(`<tr><th>Name</th><td>${esc(unit.displayName)}</td></tr>`);
   }
   if (unit.floorLevel) {
     rows.push(`<tr><th>Floor</th><td>${esc(unit.floorLevel)}</td></tr>`);
@@ -179,7 +184,7 @@ export function unitHtml(
       : "";
 
   return shell(
-    `${unit.roomId} | Open Room ID`,
+    `${unit.roomId} | OpenRoomID`,
     `<h1>${segmentedId(unit.roomId)}</h1>
      <table>${rows.join("\n")}</table>
      ${retiredNote}
@@ -192,7 +197,12 @@ export function propertyHtml(
   property: PropertyRecord,
   units: UnitRecord[],
 ): string {
-  const address = [property.address, property.city, property.region, property.country]
+  const address = [
+    property.isResidence ? null : property.address,
+    property.city,
+    property.region,
+    property.country,
+  ]
     .filter(Boolean)
     .join(", ");
   const unitItems = units
@@ -205,12 +215,18 @@ export function propertyHtml(
     .join("\n");
 
   return shell(
-    `${property.propertyCode} ${property.name} | Open Room ID`,
+    `${property.propertyCode} ${property.name} | OpenRoomID`,
     `<h1>${esc(property.name)}</h1>
      <p><span class="rid">${esc(property.propertyCode)}</span></p>
      <table>
        ${address ? `<tr><th>Address</th><td>${esc(address)}</td></tr>` : ""}
+       ${property.isResidence ? `<tr><th>Residence</th><td>Private home. The street address is held by the registrar and not published.</td></tr>` : ""}
        <tr><th>Status</th><td>${statusBadge(property.status)}</td></tr>
+       <tr><th>Claim</th><td>${
+         property.claimStatus === "claimed"
+           ? `Claimed by the operator${property.lastConfirmed ? `, last confirmed ${esc(property.lastConfirmed)}` : ""}`
+           : "Unclaimed. The operator has not confirmed these records."
+       }</td></tr>
        <tr><th>Assigned</th><td>${esc(property.assignedAt)}</td></tr>
        <tr><th>Registered units</th><td>${units.length}</td></tr>
      </table>
@@ -222,7 +238,7 @@ export function propertyHtml(
 
 export function malformedHtml(identifier: string, message: string): string {
   return shell(
-    "Malformed identifier | Open Room ID",
+    "Malformed identifier | OpenRoomID",
     `<h1>Malformed identifier</h1>
      <p><code>${esc(identifier)}</code> is not a valid roomID.</p>
      <p>${esc(message)}</p>
@@ -235,7 +251,7 @@ export function malformedHtml(identifier: string, message: string): string {
 
 export function unassignedHtml(canonical: string): string {
   return shell(
-    `${canonical} unassigned | Open Room ID`,
+    `${canonical} unassigned | OpenRoomID`,
     `<h1>${segmentedId(canonical)}</h1>
      <p>This identifier is syntactically valid but has not been assigned.
      The registry has no record for it.</p>

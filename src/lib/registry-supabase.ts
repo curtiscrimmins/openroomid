@@ -1,6 +1,10 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-import type { RecordStatus } from "@/data/demo-registry";
+import type {
+  ClaimStatus,
+  DesignatorSource,
+  RecordStatus,
+} from "@/data/demo-registry";
 import type { PropertyRecord, RegistryBackend, UnitRecord } from "@/lib/registry";
 
 interface PropertyRow {
@@ -10,6 +14,9 @@ interface PropertyRow {
   city: string | null;
   region: string | null;
   country: string | null;
+  is_residence: boolean;
+  claim_status: ClaimStatus;
+  last_confirmed: string | null;
   status: RecordStatus;
   assigned_at: string;
   superseded_by: string | null;
@@ -21,6 +28,7 @@ interface UnitRow {
   property_code: string;
   room_designator: string;
   unit_suffix: string;
+  designator_source: DesignatorSource;
   display_name: string | null;
   floor_level: string | null;
   status: RecordStatus;
@@ -33,10 +41,13 @@ function toProperty(row: PropertyRow): PropertyRecord {
   return {
     propertyCode: row.property_code,
     name: row.name,
-    address: row.address,
+    address: row.is_residence ? null : row.address,
     city: row.city,
     region: row.region,
     country: row.country,
+    isResidence: row.is_residence,
+    claimStatus: row.claim_status,
+    lastConfirmed: row.last_confirmed,
     status: row.status,
     assignedAt: row.assigned_at,
     supersededBy: row.superseded_by,
@@ -50,6 +61,7 @@ function toUnit(row: UnitRow): UnitRecord {
     propertyCode: row.property_code,
     roomDesignator: row.room_designator,
     unitSuffix: row.unit_suffix,
+    designatorSource: row.designator_source,
     displayName: row.display_name,
     floorLevel: row.floor_level,
     status: row.status,

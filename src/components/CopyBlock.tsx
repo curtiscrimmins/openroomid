@@ -19,14 +19,14 @@ export function CopyBlock({ code, label }: { code: string; label?: string }) {
     <div className="my-4">
       <div className="flex items-baseline justify-between gap-4">
         {label ? (
-          <p className="mb-1 text-[0.88rem] text-muted">{label}</p>
+          <p className="mb-1 text-sm text-muted">{label}</p>
         ) : (
           <span />
         )}
         <button
           type="button"
           onClick={copy}
-          className="btn shrink-0 !px-2.5 !py-1 !text-[0.66rem]"
+          className="btn btn-quiet shrink-0"
         >
           {copied ? "Copied" : "Copy"}
         </button>

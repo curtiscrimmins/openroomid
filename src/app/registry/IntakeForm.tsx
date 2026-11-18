@@ -30,7 +30,7 @@ function Field({
         name={name}
         required={required}
         placeholder={placeholder}
-        className="mt-1 w-full border border-rule bg-field px-3 py-2 text-[0.95rem] outline-none focus:border-accent"
+        className="field mt-1"
       />
     </label>
   );
@@ -44,7 +44,7 @@ export function IntakeForm() {
 
   if (state.status === "sent") {
     return (
-      <div className="border border-rule bg-panel px-4 py-3">
+      <div className="front-matter">
         <p>{state.message}</p>
       </div>
     );
@@ -62,14 +62,14 @@ export function IntakeForm() {
         <textarea
           name="message"
           rows={4}
-          className="mt-1 w-full border border-rule bg-field px-3 py-2 text-[0.95rem] outline-none focus:border-accent"
+          className="field mt-1"
         />
       </label>
       <button type="submit" disabled={pending} className="btn">
         {pending ? "Sending" : "Request identifiers"}
       </button>
       {state.status === "error" && (
-        <p className="text-[0.9rem] text-error">{state.message}</p>
+        <p className="text-sm text-error">{state.message}</p>
       )}
     </form>
   );

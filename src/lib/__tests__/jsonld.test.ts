@@ -18,6 +18,9 @@ const property: PropertyRecord = {
   city: "Las Vegas",
   region: "NV",
   country: "US",
+  isResidence: false,
+  claimStatus: "claimed",
+  lastConfirmed: "2026-09-01",
   status: "active",
   assignedAt: "2026-08-09",
   supersededBy: null,
@@ -29,6 +32,7 @@ const unit: UnitRecord = {
   propertyCode: "7QM4KX92",
   roomDesignator: "1412",
   unitSuffix: "B",
+  designatorSource: "door",
   displayName: "Room 1412",
   floorLevel: "14",
   status: "active",
@@ -81,6 +85,17 @@ describe("unitJsonLd", () => {
     expect(doc.supersededBy).toBe(`${ORIGIN}/7QM4KX92-1412-C`);
   });
 
+  it("states where the designator came from", () => {
+    expect(unitJsonLd(unit, property, ORIGIN).designatorSource).toBe("door");
+    const named = unitJsonLd(
+      { ...unit, roomId: "7QM4KX92-2H2S-A", roomDesignator: "2H2S", unitSuffix: "A", designatorSource: "assigned", displayName: "The Hemingway Suite" },
+      property,
+      ORIGIN,
+    );
+    expect(named.designatorSource).toBe("assigned");
+    expect(named.name).toBe("The Hemingway Suite");
+  });
+
   it("flags demonstration records", () => {
     const doc = unitJsonLd({ ...unit, isDemo: true }, property, ORIGIN);
     expect(doc.demo).toBe(true);
@@ -109,6 +124,22 @@ describe("propertyJsonLd", () => {
       containsPlace: [`${ORIGIN}/7QM4KX92-1412-B`],
       status: "active",
     });
+  });
+
+  it("reports claim status and last confirmation", () => {
+    const doc = propertyJsonLd(property, [], ORIGIN);
+    expect(doc.claim).toBe("claimed");
+    expect(doc.lastConfirmed).toBe("2026-09-01");
+    const unclaimed = propertyJsonLd({ ...property, claimStatus: "unclaimed", lastConfirmed: null }, [], ORIGIN);
+    expect(unclaimed.claim).toBe("unclaimed");
+    expect(unclaimed).not.toHaveProperty("lastConfirmed");
+  });
+
+  it("never publishes a residence's street address", () => {
+    const doc = propertyJsonLd({ ...property, isResidence: true }, [], ORIGIN);
+    expect(doc.residence).toBe(true);
+    expect(doc.address).not.toHaveProperty("streetAddress");
+    expect(doc.address).toMatchObject({ addressLocality: "Las Vegas" });
   });
 
   it("builds a postal address from available parts", () => {
